@@ -8,7 +8,7 @@
     "dev": "webpack --config webpack.config.js --watch & nodemon dist/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "minddrop",
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.8.3",
