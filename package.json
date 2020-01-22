@@ -26,6 +26,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "compose-middleware": "^5.0.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
