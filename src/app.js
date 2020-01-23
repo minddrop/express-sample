@@ -14,7 +14,7 @@ app.set('view engine', 'pug')
 app.use(morgan('tiny'))
 app.use(express.static(path.resolve('src', 'public')))
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/users/:userName', usersRouter)
 
 app.use((req, res, next) => {
   next(createError(404))
