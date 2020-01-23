@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -29,5 +30,8 @@ module.exports = {
     __filename: false
   },
   externals: [nodeExternals()],
-  plugins: [new CleanWebpackPlugin()]
+  plugins: [
+    new CleanWebpackPlugin(),
+    new webpack.EnvironmentPlugin(['MONGO_URI'])
+  ]
 }

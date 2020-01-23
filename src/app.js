@@ -1,4 +1,5 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import morgan from 'morgan'
 import path from 'path'
 import { compose } from 'compose-middleware'
@@ -10,6 +11,12 @@ import errorRouter from './routes/error'
 const app = express()
 app.set('views', path.resolve('src', 'views'))
 app.set('view engine', 'pug')
+
+const mongoUri = process.env.MONGO_URI
+if (mongoUri === undefined) throw error('undefined: MONGO_URI')
+mongoose.connect(mongoUri, { useNewUrlParser: true })
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.use(morgan('tiny'))
 app.use(express.static(path.resolve('src', 'public')))
