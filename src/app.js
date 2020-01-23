@@ -7,6 +7,7 @@ import createError from 'http-errors'
 import indexRouter from './routes/index'
 import usersRouter from './routes/users'
 import errorRouter from './routes/error'
+import catalogRouter from './routes/catalog'
 
 const app = express()
 app.set('views', path.resolve('src', 'views'))
@@ -22,6 +23,7 @@ app.use(morgan('tiny'))
 app.use(express.static(path.resolve('src', 'public')))
 app.use('/', indexRouter)
 app.use('/users/:userName', usersRouter)
+app.use('/catalog', catalogRouter)
 
 app.use((req, res, next) => {
   next(createError(404))
