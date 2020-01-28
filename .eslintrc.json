@@ -1,11 +1,22 @@
 {
   "env": {
     "node": true,
-    "es2017":true
-    
+    "es2017": true
   },
-  "parserOptions": {"sourceType": "module"},
-  "extends": ["prettier"],
-  "plugins": ["prettier"],
-  "rules": {"prettier/prettier": ["error"],"no-var":"error"}
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "extends": [
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error"
+    ],
+    "no-var": "error",
+    "no-multi-spaces": 2
+  }
 }
