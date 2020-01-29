@@ -34,7 +34,7 @@ export const index = (req, res) => {
   )
 }
 
-export const bookList = (req, res) => {
+export const bookList = (req, res, next) => {
   Book.find({}, 'title author')
     .populate('author')
     .exec((err, listBooks) => {
