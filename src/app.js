@@ -15,7 +15,7 @@ app.set('view engine', 'pug')
 
 const mongoUri = process.env.MONGO_URI
 if (mongoUri === undefined) throw error('undefined: MONGO_URI')
-mongoose.connect(mongoUri, { useNewUrlParser: true })
+mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopoloy: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
