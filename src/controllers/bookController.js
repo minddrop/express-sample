@@ -1,11 +1,51 @@
+import async, { nextTick } from 'async'
+
 import Book from '../models/book'
+import Author from '../models/author'
+import Genre from '../models/genre'
+import BookInstance from '../models/bookinstance'
 
 export const index = (req, res) => {
-  res.send('NOT IMPLEMENTED: Site Home Page')
+  async.parallel(
+    {
+      bookCount(callback) {
+        Book.countDocuments({}, callback)
+      },
+      bookInstanceCount(callback) {
+        BookInstance.countDocuments({}, callback)
+      },
+      bookInstanceAvailableCount(callback) {
+        BookInstance.countDocuments({ status: 'Available' }, callback)
+      },
+      authorCount(callback) {
+        Author.countDocuments({}, callback)
+      },
+      genreCount(callback) {
+        Genre.countDocuments({}, callback)
+      }
+    },
+    (err, results) => {
+      res.render('index', {
+        title: 'Local Library Home',
+        error: err,
+        data: results
+      })
+    }
+  )
 }
 
 export const bookList = (req, res) => {
-  res.send('NOT IMPLEMENTED: Book list')
+  Book.find({}, 'title author')
+    .populate('author')
+    .exec((err, listBooks) => {
+      if (err) return next(err)
+      listBooks.sort((a, b) => {
+        let textA = a.title.toUpperCase()
+        let textB = b.title.toUpperCase()
+        return textA < textB
+      })
+      res.render('bookList', { title: 'Book List', bookList: listBooks })
+    })
 }
 
 export const bookDetail = (req, res) => {
