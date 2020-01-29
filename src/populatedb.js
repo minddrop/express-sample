@@ -1,5 +1,5 @@
 console.log(
-  'This script populates some test books, authors, genres and bookinstances to your database. Specified database as argument - e.g.: populatedb mongodb+srv://cooluser:coolpassword@cluster0-mbdj7.mongodb.net/local_library?retryWrites=true'
+  'This script populates some test books, authors, genres and bookInstances to your database. Specified database as argument - e.g.: populatedb mongodb+srv://cooluser:coolpassword@cluster0-mbdj7.mongodb.net/local_library?retryWrites=true'
 )
 
 // Get arguments passed on command line
@@ -15,7 +15,7 @@ import async from 'async'
 import Book from './models/book'
 import Author from './models/author'
 import Genre from './models/genre'
-import BookInstance from './models/bookinstance'
+import BookInstance from './models/bookInstance'
 
 import mongoose from 'mongoose'
 let mongoDB = userArgs[0]
@@ -27,7 +27,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 let authors = []
 let genres = []
 let books = []
-let bookinstances = []
+let bookInstances = []
 
 function authorCreate(first_name, family_name, d_birth, d_death, cb) {
   let authordetail = { first_name: first_name, family_name: family_name }
@@ -83,22 +83,22 @@ function bookCreate(title, summary, isbn, author, genre, cb) {
 }
 
 function bookInstanceCreate(book, imprint, due_back, status, cb) {
-  let bookinstancedetail = {
+  let bookInstancedetail = {
     book: book,
     imprint: imprint
   }
-  if (due_back != false) bookinstancedetail.due_back = due_back
-  if (status != false) bookinstancedetail.status = status
+  if (due_back != false) bookInstancedetail.due_back = due_back
+  if (status != false) bookInstancedetail.status = status
 
-  let bookinstance = new BookInstance(bookinstancedetail)
-  bookinstance.save(function(err) {
+  let bookInstance = new BookInstance(bookInstancedetail)
+  bookInstance.save(function(err) {
     if (err) {
-      console.log('ERROR CREATING BookInstance: ' + bookinstance)
+      console.log('ERROR CREATING BookInstance: ' + bookInstance)
       cb(err, null)
       return
     }
-    console.log('New BookInstance: ' + bookinstance)
-    bookinstances.push(bookinstance)
+    console.log('New BookInstance: ' + bookInstance)
+    bookInstances.push(bookInstance)
     cb(null, book)
   })
 }
@@ -312,7 +312,7 @@ async.series(
     if (err) {
       console.log('FINAL ERR: ' + err)
     } else {
-      console.log('BOOKInstances: ' + bookinstances)
+      console.log('BOOKInstances: ' + bookInstances)
     }
     // All done, disconnect from database
     mongoose.connection.close()

@@ -13,7 +13,7 @@ const BookInstanceSchema = new Schema({
 })
 
 BookInstanceSchema.virtual('url').get(function() {
-  '/catalog/bookinstance/' + this._id
+  '/catalog/bookInstance/' + this._id
 })
 
 export default model('BookInstance', BookInstanceSchema)

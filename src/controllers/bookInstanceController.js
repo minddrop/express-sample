@@ -1,33 +1,33 @@
-import BookInstance from '../models/bookinstance'
+import BookInstance from '../models/bookInstance'
 
-export const bookinstanceList = (req, res) => {
+export const bookInstanceList = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance list')
 }
 
-export const bookinstanceDetail = (req, res) => {
+export const bookInstanceDetail = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance detail: ' + req.params.id)
 }
 
-export const bookinstanceCreateGet = (req, res) => {
+export const bookInstanceCreateGet = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance create GET')
 }
 
-export const bookinstanceCreatePost = (req, res) => {
+export const bookInstanceCreatePost = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance create POST')
 }
 
-export const bookinstanceDeleteGet = (req, res) => {
+export const bookInstanceDeleteGet = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstanceDelete GET')
 }
 
-export const bookinstanceDeletePost = (req, res) => {
+export const bookInstanceDeletePost = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance delete POST')
 }
 
-export const bookinstanceUpdateGet = (req, res) => {
+export const bookInstanceUpdateGet = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance update GET')
 }
 
-export const bookinstanceUpdatePost = (req, res) => {
+export const bookInstanceUpdatePost = (req, res) => {
   res.send('NOT IMPLEMENTED: BookInstance update POST')
 }

@@ -2,7 +2,7 @@ import { Router } from 'express'
 import * as bookController from '../controllers/bookController'
 import * as authorController from '../controllers/authorController'
 import * as genreController from '../controllers/genreController'
-import * as bookinstanceController from '../controllers/bookinstanceController'
+import * as bookInstanceController from '../controllers/bookInstanceController'
 
 const router = Router()
 
@@ -34,28 +34,28 @@ router.post('/genre/:id/update', genreController.genreUpdatePost)
 router.get('/genre/:id', genreController.genreDetail)
 router.get('/genres', genreController.genreList)
 
-router.get('/bookinstance/create', bookinstanceController.bookinstanceCreateGet)
+router.get('/bookInstance/create', bookInstanceController.bookInstanceCreateGet)
 router.post(
-  '/bookinstance/create',
-  bookinstanceController.bookinstanceCreatePost
+  '/bookInstance/create',
+  bookInstanceController.bookInstanceCreatePost
 )
 router.get(
-  '/bookinstance/:id/delete',
-  bookinstanceController.bookinstanceDeleteGet
+  '/bookInstance/:id/delete',
+  bookInstanceController.bookInstanceDeleteGet
 )
 router.post(
-  '/bookinstance/:id/delete',
-  bookinstanceController.bookinstanceDeletePost
+  '/bookInstance/:id/delete',
+  bookInstanceController.bookInstanceDeletePost
 )
 router.get(
-  '/bookinstance/:id/update',
-  bookinstanceController.bookinstanceUpdateGet
+  '/bookInstance/:id/update',
+  bookInstanceController.bookInstanceUpdateGet
 )
 router.post(
-  '/bookinstance/:id/update',
-  bookinstanceController.bookinstanceUpdatePost
+  '/bookInstance/:id/update',
+  bookInstanceController.bookInstanceUpdatePost
 )
-router.get('/bookinstance/:id', bookinstanceController.bookinstanceDetail)
-router.get('/bookinstances', bookinstanceController.bookinstanceList)
+router.get('/bookInstance/:id', bookInstanceController.bookInstanceDetail)
+router.get('/bookInstances', bookInstanceController.bookInstanceList)
 
 export default router

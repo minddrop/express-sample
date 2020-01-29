@@ -3,7 +3,7 @@ import async, { nextTick } from 'async'
 import Book from '../models/book'
 import Author from '../models/author'
 import Genre from '../models/genre'
-import BookInstance from '../models/bookinstance'
+import BookInstance from '../models/bookInstance'
 
 export const index = (req, res) => {
   async.parallel(
