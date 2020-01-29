@@ -1,4 +1,6 @@
 import Author from '../models/author'
+import Book from '../models/book'
+import async from 'async'
 
 export const authorList = (req, res, next) => {
   Author.find()
@@ -12,8 +14,30 @@ export const authorList = (req, res, next) => {
     })
 }
 
-export const authorDetail = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author detail: ' + req.params.id)
+export const authorDetail = (req, res, next) => {
+  async.parallel(
+    {
+      author: callback => {
+        Author.findById(req.params.id).exec(callback)
+      },
+      authorsBooks: callback => {
+        Book.find({ author: req.params.id }, 'title summary').exec(callback)
+      }
+    },
+    (err, results) => {
+      if (err) return next(err)
+      if (results.author === null) {
+        const err = new Error('Author not found')
+        err.status = 303
+        return next(err)
+      }
+      res.render('authorDetail', {
+        title: 'Author Detail',
+        author: results.author,
+        authorBooks: results.authorsBooks
+      })
+    }
+  )
 }
 
 export const authorCreateGet = (req, res) => {
