@@ -30,6 +30,7 @@
     "compose-middleware": "^5.0.1",
     "debug": "^4.1.1",
     "express": "^4.17.1",
+    "moment": "^2.24.0",
     "mongoose": "^5.8.9",
     "morgan": "^1.9.1",
     "pug": "^2.0.4"

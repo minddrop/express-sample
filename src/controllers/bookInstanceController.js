@@ -1,7 +1,16 @@
 import BookInstance from '../models/bookInstance'
+import { nextTick } from 'async'
 
-export const bookInstanceList = (req, res) => {
-  res.send('NOT IMPLEMENTED: BookInstance list')
+export const bookInstanceList = (req, res, next) => {
+  BookInstance.find()
+    .populate('book')
+    .exec(function(err, listBookInstances) {
+      if (err) return next(err)
+      res.render('bookInstanceList', {
+        title: 'Book Instance List',
+        bookInstanceList: listBookInstances
+      })
+    })
 }
 
 export const bookInstanceDetail = (req, res) => {
