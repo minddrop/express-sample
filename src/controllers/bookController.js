@@ -1,9 +1,8 @@
-import async, { nextTick } from 'async'
-
 import Book from '../models/book'
 import Author from '../models/author'
 import Genre from '../models/genre'
 import BookInstance from '../models/bookInstance'
+import async from 'async'
 
 export const index = (req, res) => {
   async.parallel(
@@ -49,7 +48,7 @@ export const bookList = (req, res, next) => {
 }
 
 export const bookDetail = (req, res) => {
-  res.send('NOT IMPLEMENTED: Book detail: ' + req.params.id)
+  async.parallel
 }
 
 export const bookCreateGet = (req, res) => {
