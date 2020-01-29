@@ -14,7 +14,7 @@ export const genreList = (req, res, next) => {
     })
 }
 
-export const genreDetail = (req, res) => {
+export const genreDetail = (req, res, next) => {
   async.parallel(
     {
       genre: callback => {
