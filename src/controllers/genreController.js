@@ -1,11 +1,43 @@
 import Genre from '../models/genre'
+import Book from '../models/book'
+import async from 'async'
 
-export const genreList = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre list')
+export const genreList = (req, res, next) => {
+  Genre.find()
+    .sort([['name', 'ascending']])
+    .exec(function(err, listGenres) {
+      if (err) return next(err)
+      res.render('genreList', {
+        title: 'Genre List',
+        genreList: listGenres
+      })
+    })
 }
 
 export const genreDetail = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre detail: ' + req.params.id)
+  async.parallel(
+    {
+      genre: callback => {
+        Genre.findById(req.params.id).exec(callback)
+      },
+      genreBooks: callback => {
+        Book.find({ genre: req.params.id }).exec(callback)
+      }
+    },
+    (err, results) => {
+      if (err) return next(err)
+      if (results.genre === null) {
+        const err = new Error('Genre not found')
+        err.status = 404
+        return next(err)
+      }
+      res.render('genreDetail', {
+        title: 'Genre Detail',
+        genre: results.genre,
+        genreBooks: results.genreBooks
+      })
+    }
+  )
 }
 
 export const genreCreateGet = (req, res) => {

@@ -1,7 +1,15 @@
 import Author from '../models/author'
 
-export const authorList = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author list')
+export const authorList = (req, res, next) => {
+  Author.find()
+    .sort([['family_name', 'ascending']])
+    .exec(function(err, listAuthors) {
+      if (err) return next(err)
+      res.render('authorList', {
+        title: 'Author List',
+        authorList: listAuthors
+      })
+    })
 }
 
 export const authorDetail = (req, res) => {

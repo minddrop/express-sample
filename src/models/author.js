@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose'
+import moment from 'moment'
 
 const AuthorSchema = new Schema({
   first_name: { type: String, required: true, max: 100 },
@@ -9,7 +10,7 @@ const AuthorSchema = new Schema({
 
 AuthorSchema.virtual('name').get(function() {
   const fullName =
-    this.first_name && this.family_name
+    this.first_name !== void 0 && this.family_name !== void 0
       ? this.family_name + ', ' + this.first_name
       : ''
   return fullName
@@ -22,7 +23,19 @@ AuthorSchema.virtual('lifespan').get(function() {
 })
 
 AuthorSchema.virtual('url').get(function() {
-  '/catalog/author/' + this._id
+  return '/catalog/author/' + this._id
+})
+
+AuthorSchema.virtual('date_of_birth_formatted').get(function() {
+  return this.date_of_birth !== void 0
+    ? moment(this.date_of_birth).format('YYYY-MM-DD')
+    : ''
+})
+
+AuthorSchema.virtual('date_of_death_formatted').get(function() {
+  return this.date_of_death !== void 0
+    ? moment(this.date_of_death).format('YYYY-MM-DD')
+    : ''
 })
 
 export default model('Author', AuthorSchema)
