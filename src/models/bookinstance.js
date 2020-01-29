@@ -12,6 +12,8 @@ const BookInstanceSchema = new Schema({
   due_back: { type: Date, default: Date.now }
 })
 
-BookInstanceSchema.virtual('url').get(() => '/catalog/bookinstance/' + this._id)
+BookInstanceSchema.virtual('url').get(function() {
+  '/catalog/bookinstance/' + this._id
+})
 
 export default model('BookInstance', BookInstanceSchema)

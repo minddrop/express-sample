@@ -8,6 +8,8 @@ const BookSchema = new Schema({
   genre: [{ type: Schema.Types.ObjectId, ref: 'Genre' }]
 })
 
-BookSchema.virtual('url').get(() => '/catalog/book/' + this._id)
+BookSchema.virtual('url').get(function() {
+  '/catalog/book/' + this._id
+})
 
 export default model('Book', BookSchema)

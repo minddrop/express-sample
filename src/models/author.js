@@ -7,7 +7,7 @@ const AuthorSchema = new Schema({
   date_of_death: { type: Date }
 })
 
-AuthorSchema.virtual('name').get(() => {
+AuthorSchema.virtual('name').get(function() {
   const fullName =
     this.first_name && this.family_name
       ? this.family_name + ', ' + this.first_name
@@ -15,12 +15,14 @@ AuthorSchema.virtual('name').get(() => {
   return fullName
 })
 
-AuthorSchema.virtual('lifespan').get(() => {
+AuthorSchema.virtual('lifespan').get(function() {
   return (
     this.date_of_death.getYear() - this.date_of_birth.getYear()
   ).toString()
 })
 
-AuthorSchema.virtual('url').get(() => '/catalog/author/' + this._id)
+AuthorSchema.virtual('url').get(function() {
+  '/catalog/author/' + this._id
+})
 
 export default model('Author', AuthorSchema)
