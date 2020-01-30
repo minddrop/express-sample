@@ -1,6 +1,7 @@
 import Genre from '../models/genre'
 import Book from '../models/book'
 import async from 'async'
+import { body, sanitizeBody, validationResult } from 'express-validator'
 
 export const genreList = (req, res, next) => {
   Genre.find()
@@ -41,12 +42,39 @@ export const genreDetail = (req, res, next) => {
 }
 
 export const genreCreateGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre create GET')
+  res.render('genreForm', { title: 'Create Genre' })
 }
 
-export const genreCreatePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre create POST')
-}
+export const genreCreatePost = [
+  body('name', 'Genre name required')
+    .isLength({ min: 1 })
+    .trim(),
+  sanitizeBody('name').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req)
+    const genre = new Genre({ name: req.body.name })
+
+    if (!errors.isEmpty()) {
+      res.render('genreForm', {
+        title: 'Create Genre',
+        genre: genre,
+        errors: errors.array()
+      })
+    } else {
+      Genre.findOne({ name: req.body.name }).exec((err, foundGenre) => {
+        if (err) return next(err)
+        if (foundGenre) {
+          res.redirect(foundGenre.url)
+        } else {
+          genre.save(err => {
+            if (err) return next(err)
+            res.redirect(genre.url)
+          })
+        }
+      })
+    }
+  }
+]
 
 export const genreDeleteGet = (req, res) => {
   res.send('NOT IMPLEMENTED: Genre delete GET')

@@ -20,6 +20,8 @@ const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 app.use(morgan('tiny'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.resolve('src', 'public')))
 app.use('/', indexRouter)
 app.use('/users/:userName', usersRouter)
