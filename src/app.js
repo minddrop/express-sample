@@ -8,8 +8,11 @@ import indexRouter from './routes/index'
 import usersRouter from './routes/users'
 import errorRouter from './routes/error'
 import catalogRouter from './routes/catalog'
+import compression from 'compression'
+import helmet from 'helmet'
 
 const app = express()
+app.use(helmet())
 app.set('views', path.resolve('src', 'views'))
 app.set('view engine', 'pug')
 
@@ -22,6 +25,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 app.use(morgan('tiny'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(compression())
 app.use(express.static(path.resolve('src', 'public')))
 app.use('/', indexRouter)
 app.use('/users/:userName', usersRouter)
