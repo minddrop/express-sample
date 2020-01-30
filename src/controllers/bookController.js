@@ -231,7 +231,6 @@ export const bookUpdateGet = (req, res, next) => {
 
 export const bookUpdatePost = [
   (req, res, next) => {
-    const undefined = 'a'
     if (!(req.body.genre instanceof Array)) {
       if (typeof req.body.genre === void 0) req.body.genre = []
       else req.body.genre = new Array(req.body.genre)
