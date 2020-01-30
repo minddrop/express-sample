@@ -1,6 +1,7 @@
 import Author from '../models/author'
 import Book from '../models/book'
 import async from 'async'
+import { body, validationResult, sanitizeBody } from 'express-validator'
 
 export const authorList = (req, res, next) => {
   Author.find()
@@ -24,6 +25,7 @@ export const authorDetail = (req, res, next) => {
         Book.find({ author: req.params.id }, 'title summary').exec(callback)
       }
     },
+
     (err, results) => {
       if (err) return next(err)
       if (results.author === null) {
@@ -41,12 +43,58 @@ export const authorDetail = (req, res, next) => {
 }
 
 export const authorCreateGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author create GET')
+  res.render('authorForm', { title: 'Create Author' })
 }
 
-export const authorCreatePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author create POST')
-}
+export const authorCreatePost = [
+  body('first-name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('First name must be specified.')
+    .isAlphanumeric()
+    .withMessage('First name has non-alphanumeric characters.'),
+  body('family-name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Family name must be specified.')
+    .isAlphanumeric()
+    .withMessage('Family name has non-alphanumeric characters.'),
+  body('date-of-birth', 'Invalid date of birth')
+    .optional({ checkFalsy: true })
+    .isISO8601(),
+  body('date-of-death', 'Invalid date of death')
+    .optional({ checkFalsy: true })
+    .isISO8601(),
+  sanitizeBody('first-name').escape(),
+  sanitizeBody('family-name').escape(),
+  sanitizeBody('date-of-birth').toDate(),
+  sanitizeBody('date-of-death').toDate(),
+
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.render('authorForm', {
+        title: 'Create Author',
+        author: req.body,
+        errors: errors.array()
+      })
+      return
+    } else {
+      const author = new Author({
+        first_name: req.body['first-name'],
+        family_name: req.body['family-name'],
+        date_of_birth: req.body['date-of-birth'],
+        date_of_death: req.body['date-of-death']
+      })
+      author.save(function(err) {
+        if (err) {
+          return next(err)
+        }
+        res.redirect(author.url)
+      })
+    }
+  }
+]
 
 export const authorDeleteGet = (req, res) => {
   res.send('NOT IMPLEMENTED: Author delete GET')

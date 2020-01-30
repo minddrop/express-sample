@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1=title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='first-name') First Name:
+      input#first_name.form-control(type='text' placeholder='First name (Christian) last' name='first-name' required='true' value=(undefined===author ? '' : author.first_name) )
+      label(for='family-name') Family Name:
+      input#family_name.form-control(type='text' placeholder='Family name (surname)' name='family-name' required='true' value=(undefined===author ? '' : author.family_name))
+    div.form-group
+      label(for='date-of-birth') Date of birth:
+      input#date_of_birth.form-control(type='date' name='date-of-birth' value=(undefined===author ? '' : author.date_of_birth) )
+    button.btn.btn-primary(type='submit') Submit
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

@@ -3,6 +3,7 @@ import Author from '../models/author'
 import Genre from '../models/genre'
 import BookInstance from '../models/bookInstance'
 import async from 'async'
+import { body, validationResult, sanitizeBody } from 'express-validator'
 
 export const index = (req, res) => {
   async.parallel(
@@ -78,13 +79,101 @@ export const bookDetail = (req, res, next) => {
   )
 }
 
-export const bookCreateGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Book create GET')
+export const bookCreateGet = (req, res, next) => {
+  async.parallel(
+    {
+      authors: callback => {
+        Author.find(callback)
+      },
+      genres: callback => {
+        Genre.find(callback)
+      }
+    },
+    (err, results) => {
+      if (err) {
+        return next(err)
+      }
+      res.render('bookForm', {
+        title: 'Create Book',
+        authors: results.authors,
+        genres: results.genres
+      })
+    }
+  )
 }
 
-export const bookCreatePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Book create POST')
-}
+export const bookCreatePost = [
+  (req, res, next) => {
+    if (!(req.body.genre instanceof Array)) {
+      if (req.body.genre === void 0) req.body.genre = []
+      else req.body.genre = new Array(req.body.genre)
+    }
+    next()
+  },
+
+  body('title', 'Title must not be empty.')
+    .isLength({ min: 1 })
+    .trim(),
+  body('author', 'Author must not be empty.')
+    .isLength({ min: 1 })
+    .trim(),
+  body('summary', 'Summary must not be empty.')
+    .isLength({ min: 1 })
+    .trim(),
+  body('isbn', 'ISBN must not be empty')
+    .isLength({ min: 1 })
+    .trim(),
+  sanitizeBody('*').escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req)
+    const book = new Book({
+      title: req.body.title,
+      author: req.body.author,
+      summary: req.body.summary,
+      isbn: req.body.isbn,
+      genre: req.body.genre
+    })
+
+    if (!errors.isEmpty()) {
+      async.parallel(
+        {
+          authors: callback => {
+            Author.find(callback)
+          },
+          genres: callback => {
+            Genre.find(callback)
+          }
+        },
+        (err, results) => {
+          if (err) {
+            return next(err)
+          }
+          for (let i = 0; i < results.genres.length; i++) {
+            if (book.genre.indexOf(results.genres[i]._id) > -1) {
+              results.genres[i].checked = 'true'
+            }
+          }
+          res.render('bookForm', {
+            title: 'Create Book',
+            authors: results.authors,
+            genres: results.genres,
+            book: book,
+            errors: errors.array()
+          })
+        }
+      )
+      return
+    } else {
+      book.save(err => {
+        if (err) {
+          return next(err)
+        }
+        res.redirect(book.url)
+      })
+    }
+  }
+]
 
 export const bookDeleteGet = (req, res) => {
   res.send('NOT IMPLEMENTED: Book delete GET')
