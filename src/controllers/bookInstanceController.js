@@ -6,7 +6,7 @@ import { body, validationResult, sanitizeBody } from 'express-validator'
 export const bookInstanceList = (req, res, next) => {
   BookInstance.find()
     .populate('book')
-    .exec(function(err, listBookInstances) {
+    .exec((err, listBookInstances) => {
       if (err) return next(err)
       res.render('bookInstanceList', {
         title: 'Book Instance List',

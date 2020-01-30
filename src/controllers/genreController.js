@@ -6,7 +6,7 @@ import { body, sanitizeBody, validationResult } from 'express-validator'
 export const genreList = (req, res, next) => {
   Genre.find()
     .sort([['name', 'ascending']])
-    .exec(function(err, listGenres) {
+    .exec((err, listGenres) => {
       if (err) return next(err)
       res.render('genreList', {
         title: 'Genre List',
