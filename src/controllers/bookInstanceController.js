@@ -1,5 +1,4 @@
 import BookInstance from '../models/bookInstance'
-import { nextTick } from 'async'
 
 export const bookInstanceList = (req, res, next) => {
   BookInstance.find()
@@ -13,8 +12,21 @@ export const bookInstanceList = (req, res, next) => {
     })
 }
 
-export const bookInstanceDetail = (req, res) => {
-  res.send('NOT IMPLEMENTED: BookInstance detail: ' + req.params.id)
+export const bookInstanceDetail = (req, res, next) => {
+  BookInstance.findById(req.params.id)
+    .populate('book')
+    .exec((err, bookInstance) => {
+      if (err) return next(err)
+      if (bookInstance === null) {
+        const err = new Error('Book copy not found')
+        err.status = 404
+        return next(err)
+      }
+      res.render('bookInstanceDetail', {
+        title: 'Copy: ' + bookInstance.book.title,
+        bookInstance: bookInstance
+      })
+    })
 }
 
 export const bookInstanceCreateGet = (req, res) => {
