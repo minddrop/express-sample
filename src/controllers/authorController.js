@@ -6,7 +6,7 @@ import { body, validationResult, sanitizeBody } from 'express-validator'
 export const authorList = (req, res, next) => {
   Author.find()
     .sort([['family_name', 'ascending']])
-    .exec(function(err, listAuthors) {
+    .exec((err, listAuthors) => {
       if (err) return next(err)
       res.render('authorList', {
         title: 'Author List',
@@ -86,22 +86,65 @@ export const authorCreatePost = [
         date_of_birth: req.body['date-of-birth'],
         date_of_death: req.body['date-of-death']
       })
-      author.save(function(err) {
-        if (err) {
-          return next(err)
-        }
+      author.save(err => {
+        if (err) return next(err)
         res.redirect(author.url)
       })
     }
   }
 ]
 
-export const authorDeleteGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author delete GET')
+export const authorDeleteGet = (req, res, next) => {
+  async.parallel(
+    {
+      author: callback => {
+        Author.findById(req.params.id).exec(callback)
+      },
+      authorsBooks: callback => {
+        Book.find({ author: req.params.id }).exec(callback)
+      }
+    },
+    (err, results) => {
+      if (err) return next(err)
+      if (results.author == null) {
+        res.redirect('/catalog/authors')
+      }
+      res.render('authorDelete', {
+        title: 'Delete Author',
+        author: results.author,
+        authorBooks: results.authorsBooks
+      })
+    }
+  )
 }
 
-export const authorDeletePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author delete POST')
+export const authorDeletePost = (req, res, next) => {
+  async.parallel(
+    {
+      author: callback => {
+        Author.findById(req.body.authorid).exec(callback)
+      },
+      authorsBooks: callback => {
+        Book.find({ author: req.body.authorid }).exec(callback)
+      }
+    },
+    (err, results) => {
+      if (err) return next(err)
+      if (results.authorsBooks.length > 0) {
+        res.render('authorDelete', {
+          title: 'Delete Author',
+          author: results.author,
+          authorBooks: results.authorsBooks
+        })
+        return
+      } else {
+        Author.findByIdAndRemove(req.body.authorid, err => {
+          if (err) return next(err)
+          res.redirect('/catalog/authors')
+        })
+      }
+    }
+  )
 }
 
 export const authorUpdateGet = (req, res) => {
