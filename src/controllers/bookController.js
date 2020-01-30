@@ -90,9 +90,7 @@ export const bookCreateGet = (req, res, next) => {
       }
     },
     (err, results) => {
-      if (err) {
-        return next(err)
-      }
+      if (err) return next(err)
       res.render('bookForm', {
         title: 'Create Book',
         authors: results.authors,
@@ -146,9 +144,7 @@ export const bookCreatePost = [
           }
         },
         (err, results) => {
-          if (err) {
-            return next(err)
-          }
+          if (err) return next(err)
           for (let i = 0; i < results.genres.length; i++) {
             if (book.genre.indexOf(results.genres[i]._id) > -1) {
               results.genres[i].checked = 'true'
@@ -166,9 +162,7 @@ export const bookCreatePost = [
       return
     } else {
       book.save(err => {
-        if (err) {
-          return next(err)
-        }
+        if (err) return next(err)
         res.redirect(book.url)
       })
     }

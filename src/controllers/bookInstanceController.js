@@ -34,9 +34,7 @@ export const bookInstanceDetail = (req, res, next) => {
 
 export const bookInstanceCreateGet = (req, res) => {
   Book.find({}, 'title').exec((err, books) => {
-    if (err) {
-      return next(err)
-    }
+    if (err) return next(err)
     res.render('bookInstanceForm', {
       title: 'Create BookInstance',
       bookList: books
@@ -72,9 +70,7 @@ export const bookInstanceCreatePost = [
 
     if (!errors.isEmpty()) {
       Book.find({}, 'title').exec((err, books) => {
-        if (err) {
-          return next(err)
-        }
+        if (err) return next(err)
         res.render('bookInstanceForm', {
           title: 'Create BookInstance',
           bookList: books,
@@ -86,9 +82,7 @@ export const bookInstanceCreatePost = [
       return
     } else {
       bookInstance.save(err => {
-        if (err) {
-          return next(err)
-        }
+        if (err) return next(err)
         res.redirect(bookInstance.url)
       })
     }
