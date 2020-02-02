@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/www",
     "build": "webpack --config webpack.config.js",
     "dev": "webpack --config webpack.config.js --watch & DEBUG=express-sample:* nodemon dist/www"
   },

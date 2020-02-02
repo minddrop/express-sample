@@ -17,7 +17,7 @@ app.set('views', path.resolve('src', 'views'))
 app.set('view engine', 'pug')
 
 const mongoUri = process.env.MONGO_URI
-if (mongoUri === void 0) throw error('undefined: MONGO_URI')
+if (mongoUri === void 0) throw new Error('undefined: MONGO_URI')
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopoloy: true })
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
@@ -48,7 +48,7 @@ app.use(
     errorRouter
   ])
 )
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.locals.message = err.message
   res.locals.error = req.app.get('env') === 'development' ? err : {}
   res.status(err.status || 500)
