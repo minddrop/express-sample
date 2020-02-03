@@ -106,7 +106,7 @@ export const authorDeleteGet = (req, res, next) => {
     },
     (err, results) => {
       if (err) return next(err)
-      if (results.author == null) {
+      if (results.author === null) {
         res.redirect('/catalog/authors')
       }
       res.render('authorDelete', {
