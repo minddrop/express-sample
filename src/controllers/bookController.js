@@ -254,7 +254,7 @@ export const bookUpdateGet = (req, res, next) => {
 export const bookUpdatePost = [
   (req, res, next) => {
     if (!(req.body.genre instanceof Array)) {
-      if (typeof req.body.genre === void 0) req.body.genre = []
+      if (req.body.genre === void 0) req.body.genre = []
       else req.body.genre = new Array(req.body.genre)
     }
     next()
@@ -285,8 +285,8 @@ export const bookUpdatePost = [
       author: req.body.author,
       summary: req.body.summary,
       isbn: req.body.isbn,
-      genre: typeof req.body.genre === void 0 ? [] : req.body.genre,
-      _id: req.params.id //This is required, or a new ID will be assigned!
+      genre: req.body.genre === void 0 ? [] : req.body.genre,
+      _id: req.params.id
     })
 
     if (!errors.isEmpty()) {
