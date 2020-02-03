@@ -20,8 +20,8 @@ block content
 
   p Do you really want to delete this BookInstance?
 
-    form(method='POST' action='')
-      div.form-group
-        input#bookInstanceId.form-control(type='hidden',name='bookinstanceid', required='true', value=bookInstance._id )
+  form(method='POST' action='')
+    div.form-group
+      input#bookInstanceId.form-control(type='hidden',name='bookinstanceid', required='true', value=bookInstance._id )
 
-      button.btn.btn-primary(type='submit') Delete
+    button.btn.btn-primary(type='submit') Delete
