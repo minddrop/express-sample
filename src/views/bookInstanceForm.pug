@@ -10,24 +10,30 @@ block content
         - bookList.sort((a,b) => {let textA = a.title.toUpperCase(); let textB = b.title.toUpperCase(); return (textA < textB)});
         for book in bookList
           if bookInstance
-            option(value=book._id selected=(bookInstance.book.toString()==book._id.toString() ? 'selected' : false)) #{book.title}
+            option(
+              value=book._id
+              selected=(bookInstance.book._id === book._id.toString() ? 'selected' : false)
+            ) #{book.title}
           else
             option(value=book._id) #{book.title}
 
     div.form-group
       label(for='imprint') Imprint:
-      input#imprint.form-control(type='text' placeholder='Publisher and date information' name='imprint' required='true' value=(undefined===bookInstance ? '' : bookInstance.imprint))
+      input#imprint.form-control(type='text' placeholder='Publisher and date information' name='imprint' required='true' value=(bookInstance === void 0 ? '' : bookInstance.imprint))
     div.form-group
       label(for='due-back') Date when book available:
-      input#due_back.form-control(type='date' name='due-back' value=(undefined===bookInstance ? '' : bookInstance.due_back))
-
+      input#due_back.form-control(type='date' name='due-back' value=(dueBack === void 0 ? '' : dueBack))
     div.form-group
       label(for='status') Status:
-      select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
-        option(value='Maintenance') Maintenance
-        option(value='Available') Available
-        option(value='Loaned') Loaned
-        option(value='Reserved') Reserved
+      select#status.form-control(type='select' placeholder='Select status' name='status' required='true' value=(bookInstance === void 0 ? '' : bookInstance.status))
+        each status in ['Available', 'Maintenance', 'Loaned', 'Reserved']
+          if bookInstance
+            option(
+              value=status
+              selected=(bookInstance.status === status ? 'selected' : false)
+            ) #{status}
+          else
+            option(value=status) #{status}
 
     button.btn.btn-primary(type='submit') Submit
 
