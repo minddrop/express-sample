@@ -177,6 +177,11 @@ export const bookDeleteGet = (req, res, next) => {
           .populate('author')
           .populate('genre')
           .exec(callback)
+      },
+      bookInstance: callback => {
+        BookInstance.find({
+          book: req.params.id
+        }).exec(callback)
       }
     },
     (err, results) => {
@@ -186,7 +191,8 @@ export const bookDeleteGet = (req, res, next) => {
       }
       res.render('bookDelete', {
         title: 'Delete Book',
-        book: results.book
+        book: results.book,
+        bookInstances: results.bookInstance
       })
     }
   )
