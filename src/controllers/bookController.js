@@ -169,12 +169,34 @@ export const bookCreatePost = [
   }
 ]
 
-export const bookDeleteGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Book delete GET')
+export const bookDeleteGet = (req, res, next) => {
+  async.parallel(
+    {
+      book: callback => {
+        Book.findById(req.params.id)
+          .populate('author')
+          .populate('genre')
+          .exec(callback)
+      }
+    },
+    (err, results) => {
+      if (err) return next(err)
+      if (results.book === null) {
+        res.redirect('/catalog/books')
+      }
+      res.render('bookDelete', {
+        title: 'Delete Book',
+        book: results.book
+      })
+    }
+  )
 }
 
-export const bookDeletePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Book delete POST')
+export const bookDeletePost = (req, res, next) => {
+  Book.findByIdAndDelete(req.body.bookid, err => {
+    if (err) return next(err)
+    res.redirect('/catalog/books')
+  })
 }
 
 export const bookUpdateGet = (req, res, next) => {
