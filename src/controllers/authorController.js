@@ -107,7 +107,7 @@ export const authorDeleteGet = (req, res, next) => {
     (err, results) => {
       if (err) return next(err)
       if (results.author === null) {
-        res.redirect('/catalog/authors')
+        return res.redirect('/catalog/authors')
       }
       res.render('authorDelete', {
         title: 'Delete Author',
@@ -131,18 +131,17 @@ export const authorDeletePost = (req, res, next) => {
     (err, results) => {
       if (err) return next(err)
       if (results.authorsBooks.length > 0) {
-        res.render('authorDelete', {
+        return res.render('authorDelete', {
           title: 'Delete Author',
           author: results.author,
           authorBooks: results.authorsBooks
         })
-        return
-      } else {
-        Author.findByIdAndRemove(req.body.authorid, err => {
-          if (err) return next(err)
-          res.redirect('/catalog/authors')
-        })
       }
+
+      Author.findByIdAndRemove(req.body.authorid, err => {
+        if (err) return next(err)
+        res.redirect('/catalog/authors')
+      })
     }
   )
 }

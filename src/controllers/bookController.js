@@ -306,7 +306,7 @@ export const bookUpdatePost = [
               results.genres[i].checked = 'true'
             }
           }
-          res.render('bookForm', {
+          return res.render('bookForm', {
             title: 'Update Book',
             authors: results.authors,
             genres: results.genres,
@@ -315,12 +315,10 @@ export const bookUpdatePost = [
           })
         }
       )
-      return
-    } else {
-      Book.findByIdAndUpdate(req.params.id, book, {}, (err, thebook) => {
-        if (err) return next(err)
-        res.redirect(thebook.url)
-      })
     }
+    Book.findByIdAndUpdate(req.params.id, book, {}, (err, thebook) => {
+      if (err) return next(err)
+      res.redirect(thebook.url)
+    })
   }
 ]
