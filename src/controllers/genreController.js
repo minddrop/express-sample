@@ -60,19 +60,15 @@ export const genreCreatePost = [
         genre: genre,
         errors: errors.array()
       })
-    } else {
-      Genre.findOne({ name: req.body.name }).exec((err, foundGenre) => {
-        if (err) return next(err)
-        if (foundGenre) {
-          res.redirect(foundGenre.url)
-        } else {
-          genre.save(err => {
-            if (err) return next(err)
-            res.redirect(genre.url)
-          })
-        }
-      })
     }
+    Genre.findOne({ name: req.body.name }, (err, foundGenre) => {
+      if (err) return next(err)
+      if (foundGenre) return res.redirect(foundGenre.url)
+      genre.save(err => {
+        if (err) return next(err)
+        res.redirect(genre.url)
+      })
+    })
   }
 ]
 
@@ -84,10 +80,39 @@ export const genreDeletePost = (req, res) => {
   res.send('NOT IMPLEMENTED: Genre delete POST')
 }
 
-export const genreUpdateGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre update GET')
+export const genreUpdateGet = (req, res, next) => {
+  Genre.findById(req.params.id, (err, genre) => {
+    if (err) return next(err)
+    if (genre === null) {
+      res.redirect('/catalog/genres')
+      return
+    }
+    res.render('genreForm', {
+      title: 'Update Genre',
+      genre: genre
+    })
+  })
 }
 
-export const genreUpdatePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Genre update POST')
-}
+export const genreUpdatePost = [
+  body('name', 'Genre name required')
+    .isLength({ min: 1 })
+    .trim(),
+  sanitizeBody('name').escape(),
+
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.render('genreForm', {
+        title: 'Update Genre',
+        genre: genre,
+        errors: errors.array()
+      })
+    }
+    const genre = new Genre({ name: req.body.name, _id: req.params.id })
+    Genre.findByIdAndUpdate(req.params.id, genre, (err, thegenre) => {
+      if (err) return next(err)
+      res.redirect(thegenre.url)
+    })
+  }
+]
