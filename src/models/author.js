@@ -33,11 +33,7 @@ AuthorSchema.virtual('date_of_death_formatted').get(function() {
 })
 
 AuthorSchema.virtual('lifespan').get(function() {
-  return (
-    moment(this.date_of_birth).format('YYYY-MM-DD') +
-    ' - ' +
-    moment(this.date_of_death).format('YYYY-MM-DD')
-  )
+  return this.date_of_birth_formatted + ' - ' + this.date_of_death_formatted
 })
 
 export default model('Author', AuthorSchema)
