@@ -146,10 +146,66 @@ export const authorDeletePost = (req, res, next) => {
   )
 }
 
-export const authorUpdateGet = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author update GET')
+export const authorUpdateGet = (req, res, next) => {
+  Author.findById(req.params.id, (err, author) => {
+    if (err) return next(err)
+    const authorDate = {
+      birth: author.date_of_birth.toISOString().split('T')[0],
+      death: author.date_of_death.toISOString().split('T')[0]
+    }
+    res.render('authorForm', {
+      title: 'Update Author',
+      author: author,
+      date: authorDate
+    })
+  })
 }
 
-export const authorUpdatePost = (req, res) => {
-  res.send('NOT IMPLEMENTED: Author update POST')
-}
+export const authorUpdatePost = [
+  body('first-name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('First name must be specified.')
+    .isAlphanumeric()
+    .withMessage('First name has non-alphanumeric characters.'),
+  body('family-name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Family name must be specified.')
+    .isAlphanumeric()
+    .withMessage('Family name has non-alphanumeric characters.'),
+  body('date-of-birth', 'Invalid date of birth')
+    .optional({ checkFalsy: true })
+    .isISO8601(),
+  body('date-of-death', 'Invalid date of death')
+    .optional({ checkFalsy: true })
+    .isISO8601(),
+  sanitizeBody('first-name').escape(),
+  sanitizeBody('family-name').escape(),
+  sanitizeBody('date-of-birth').toDate(),
+  sanitizeBody('date-of-death').toDate(),
+
+  (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      res.render('authorForm', {
+        title: 'Update Author',
+        author: req.body.author,
+        errors: errors.array()
+      })
+      return
+    }
+
+    const author = new Author({
+      first_name: req.body['first-name'],
+      family_name: req.body['family-name'],
+      date_of_birth: req.body['date-of-birth'],
+      date_of_death: req.body['date-of-death'],
+      _id: req.params.id
+    })
+    Author.findByIdAndUpdate(req.params.id, author, (err, theauthor) => {
+      if (err) return next(err)
+      res.redirect(theauthor.url)
+    })
+  }
+]
