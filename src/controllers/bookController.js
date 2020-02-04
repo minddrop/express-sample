@@ -322,7 +322,7 @@ export const bookUpdatePost = [
         }
       )
     }
-    Book.findByIdAndUpdate(req.params.id, book, {}, (err, thebook) => {
+    Book.findByIdAndUpdate(req.params.id, book, (err, thebook) => {
       if (err) return next(err)
       res.redirect(thebook.url)
     })

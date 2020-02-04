@@ -8,14 +8,14 @@ block content
   p #[strong Imprint:] #{bookInstance.imprint}
 
   p #[strong Status:]
-    if bookInstance.status=='Available'
+    if bookInstance.status==='Available'
       span.text-success #{bookInstance.status}
-    else if bookInstance.status=='Maintenance'
+    else if bookInstance.status==='Maintenance'
       span.text-danger #{bookInstance.status}
     else
       span.text-warning #{bookInstance.status}
 
-  if bookInstance.status!='Available'
+  if bookInstance.status!=='Available'
     p #[strong Due back:] #{bookInstance.due_back_formatted}
 
   p Do you really want to delete this BookInstance?

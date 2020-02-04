@@ -198,7 +198,6 @@ export const bookInstanceUpdatePost = [
     BookInstance.findByIdAndUpdate(
       req.params.id,
       bookInstance,
-      {},
       (err, thebookInstance) => {
         if (err) return next(err)
         res.redirect(thebookInstance.url)
